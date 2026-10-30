@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mirage Tabs settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main>
+    <h1>Mirage Tabs <span id="saved" aria-live="polite"></span></h1>
+
+    <section>
+      <h2>Which tabs get hidden</h2>
+      <label class="row"><input type="checkbox" id="enabled"> <span>Hide tabs when I switch away</span></label>
+      <label class="row">
+        <span>Hide automatically</span>
+        <select id="mode">
+          <option value="listed">Listed sites + pinned tabs</option>
+          <option value="manual">Only pinned tabs</option>
+          <option value="all">Every site</option>
+        </select>
+      </label>
+      <label class="col">
+        <span>Sites to hide (one per line, e.g. <code>youtube.com</code>; subdomains are included)</span>
+        <textarea id="sites" rows="5" spellcheck="false" placeholder="youtube.com&#10;reddit.com"></textarea>
+      </label>
+      <p class="note">Other tabs are never touched. To hide just one tab, tick “Hide only this tab” in the toolbar popup, or press <b>Alt+X</b> on it (change the shortcut at <code>edge://extensions/shortcuts</code>).</p>
+    </section>
+
+    <section>
+      <h2>Unlock &amp; search</h2>
+      <label class="col">
+        <span>Unlock word. Type it into the fake search box and press Enter to bring the real page back</span>
+        <input type="text" id="unlockWord" autocomplete="off" spellcheck="false">
+      </label>
+      <p class="note">Case doesn't matter. If left empty, clicking the page restores it instead. This is a convenience lock against casual glances, not real security: anyone using your browser profile could find the word.</p>
+      <label class="row">
+        <span>Anything else typed is searched with</span>
+        <select id="searchEngine">
+          <option value="google">Google</option>
+          <option value="bing">Bing</option>
+          <option value="duckduckgo">DuckDuckGo</option>
+        </select>
+      </label>
+      <label class="row">
+        <span>Searches and shortcuts open in</span>
+        <select id="searchIn">
+          <option value="newtab">a new tab (hidden page stays covered)</option>
+          <option value="same">this tab (replaces the hidden page)</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
+      <h2>Tab disguise</h2>
+      <label class="row"><input type="checkbox" id="cloakTitle"> <span>Change the tab title and icon while hidden</span></label>
+      <label class="row">
+        <span>Title</span>
+        <input type="text" id="coverTitle" placeholder="New tab">
+      </label>
+      <label class="row">
+        <span>Icon</span>
+        <select id="iconStyle">
+          <option value="blank">Invisible</option>
+          <option value="globe">Globe</option>
+          <option value="magnifier">Magnifier</option>
+        </select>
+      </label>
+      <p class="note">If the site's icon still shows in the tab strip, try “Globe”: a visible icon is accepted by the browser more reliably than an invisible one.</p>
+    </section>
+
+    <section>
+      <h2>While hidden</h2>
+      <label class="row"><input type="checkbox" id="muteOnCloak"> <span>Mute the tab's audio (only if it wasn't already muted)</span></label>
+      <label class="row"><input type="checkbox" id="pauseMedia"> <span>Pause videos and audio, and resume them when unlocked</span></label>
+      <label class="row">
+        <span>Also hide a tab after being idle for (minutes, 0 = off)</span>
+        <input type="number" id="idleMinutes" min="0" max="120">
+      </label>
+    </section>
+
+    <section>
+      <h2>Cover page</h2>
+      <label class="row">
+        <span>When a tab is hidden, show</span>
+        <select id="cover"></select>
+      </label>
+      <div id="poolRow">
+        <p class="note">Random picks a different page each time, from these:</p>
+        <div id="pool"></div>
+      </div>
+      <div class="row"><button id="shuffle" type="button">Show another preview</button></div>
+      <div class="stage"><div class="screen" id="screen"></div></div>
+      <p class="note">Where to type your unlock word (then press Enter): New tab = the search box; Document = “Search the menus”; Spreadsheet = the formula bar; Email = “Search mail”; PDF = the page-number box; Article = “Search”; 404 page = click the word “nginx”; Can't reach this page = click “ERR_CONNECTION_TIMED_OUT” (on those two nothing shows as you type). On any dummy page you can also just type the word anywhere, with nothing focused, and no Enter is needed. Each page sets its own matching tab title and icon.</p>
+    </section>
+
+    <section>
+      <h2>Look of the New tab cover</h2>
+      <label class="row">
+        <span>Layout</span>
+        <select id="layout">
+          <option value="search">Search box + shortcuts</option>
+          <option value="clock">Clock + search box</option>
+          <option value="homepage">Big title + search box</option>
+          <option value="minimal">Search box only</option>
+        </select>
+      </label>
+      <label class="row" id="greetingRow"><span>Clock subtitle (empty = today's date)</span> <input type="text" id="greeting" placeholder="Good day"></label>
+      <label class="row" id="wordmarkRow"><span>Big title</span> <input type="text" id="wordmark" placeholder="Google"></label>
+      <label class="col" id="shortcutsRow">
+        <span>Shortcut tiles (one per line as <code>Name|https://address</code>, up to 6)</span>
+        <textarea id="shortcuts" rows="3" spellcheck="false"></textarea>
+      </label>
+
+      <div id="swatches" role="radiogroup" aria-label="Background"></div>
+
+      <div id="customRow" hidden>
+        <label class="col">
+          <span>Custom background: a CSS gradient, a colour, or an image address (uploaded image wins)</span>
+          <input type="text" id="customCss" spellcheck="false" placeholder="linear-gradient(135deg,#0f2027,#2c5364)">
+        </label>
+        <label class="row"><span>Image darkening</span> <input type="range" id="dim" min="0" max="0.8" step="0.05"></label>
+        <div class="row"><button id="uploadImage" type="button">Upload an image…</button> <button id="removeImage" type="button">Remove my image</button></div>
+      </div>
+      <input type="file" id="file" accept="image/*" hidden>
+      <p class="note" id="imageNote">Uploaded images stay on this computer, resized to fit the screen. Image addresses can be blocked by some sites' security settings; an upload always works.</p>
+
+    </section>
+  </main>
+
+  <script src="../ntp.js"></script>
+  <script src="../covers.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

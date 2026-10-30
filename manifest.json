@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Mirage Tabs",
+  "version": "1.2.0",
+  "description": "Disguise chosen tabs as a fake New tab page. Type your unlock word into its search box to bring the real page back.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Mirage Tabs",
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "ntp.js",
+        "covers.js",
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+  "commands": {
+    "panic-cloak": {
+      "suggested_key": {
+        "default": "Alt+X"
+      },
+      "description": "Pin this tab and hide it instantly"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

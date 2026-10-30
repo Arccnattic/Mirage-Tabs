@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mirage Tabs</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <h1><span>Mirage Tabs</span><span class="badge" title="Pin this tab and hide it instantly. Change it at edge://extensions/shortcuts">Alt + X</span></h1>
+
+  <label class="row">
+    <span>Hide tabs when I switch away</span>
+    <input type="checkbox" id="enabled">
+  </label>
+
+  <div class="card">
+    <div id="siteName" class="site">This site</div>
+    <button id="toggleSite">Hide this site</button>
+    <label class="row small">
+      <span>Hide only this tab (even if the site isn't listed)</span>
+      <input type="checkbox" id="tabPin">
+    </label>
+  </div>
+
+  <label class="col">
+    <span>Which tabs hide automatically</span>
+    <select id="mode">
+      <option value="listed">Listed sites + pinned tabs</option>
+      <option value="manual">Only pinned tabs</option>
+      <option value="all">Every site</option>
+    </select>
+  </label>
+
+  <label class="col">
+    <span>Cover page</span>
+    <select id="cover"></select>
+  </label>
+
+  <button id="hideNow">Hide this tab now</button>
+  <button id="more" class="link">Styles, unlock word &amp; more…</button>
+  <p id="status" role="status"></p>
+
+  <script src="../ntp.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
