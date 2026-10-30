@@ -22,4 +22,4 @@ Settings are stored in your browser's sync storage. Nothing is collected or
 sent anywhere. See PRIVACY.md.
 
 ## License
-MIT
+GNU AGPL v3. See LICENSE.
